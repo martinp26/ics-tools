@@ -1,0 +1,38 @@
+Description
+===========
+
+A collection of small tools for comparing and mergin ics calendar files.
+
+The two wrapper scripts compare_ics.sh and merge_ics.sh rely on the
+python program sort_ics.py to generate a normalized view of calendar
+files before starting an external compare / merge tool.
+
+They also filter out typically conflicting lines in the ics files,
+like time stamps for the container files.  Those are regenerated for
+the merged file.
+
+Also typical violations of the ics standard are taken out (illegal
+timestamps from before 1900 typically created by korganizer and
+outlook).  Otherwise the underlying python library for parsing the ics
+files chokes.
+
+Usage
+=====
+
+I use those scripts for syncing my calendar files between several
+machines.  They also live in a git repository.  Above mentioned
+scripts are used as merge tool for git:
+
+.gitattributes contains this line:
+-------->8-------->8-------->8-------->8-------->8-------->8--------
+*.ics merge=git-merge-ics
+-------->8-------->8-------->8-------->8-------->8-------->8--------
+
+They can also be used for manual comparison and merging, obviously.
+
+Dependencies
+============
+
+The python tools needs the icalendar library from here:
+
+http://codespeak.net/icalendar/

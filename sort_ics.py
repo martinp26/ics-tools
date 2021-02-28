@@ -1,5 +1,7 @@
 #!/usr/bin/python
 
+from __future__ import print_function
+
 from icalendar import Calendar
 import sys
 
@@ -18,30 +20,19 @@ def get_key_value(a):
 
     return val
 
-def uid_sort(a, b):
-    # fixme: we could protect us here against (invalid) UID-less components
-    a_val = get_key_value(a)
-    b_val = get_key_value(b)
-
-    if a_val > b_val:
-        return 1
-    elif a_val < b_val:
-        return -1
-    else:
-        return 0
-
 if len(sys.argv) < 3:
-    print "Usage: sort_ics.py in.ics out.ics"
+    print("Usage: sort_ics.py in.ics out.ics")
     sys.exit(1)
 
-cal = Calendar.from_string(open(sys.argv[1], 'rb').read())
+cal = Calendar.from_ical(open(sys.argv[1], 'rb').read())
 
-cal.subcomponents.sort(uid_sort)
+cal.subcomponents.sort(key=get_key_value)
 
-# print comps
-# comps.sort(uid_sort)
-# print comps
+# comps = cal.subcomponents
+# print(comps)
+# comps.sort(key=get_key_value)
+# print(comps)
 
 f = open(sys.argv[2], 'wb')
-f.write(cal.as_string())
+f.write(cal.to_ical())
 f.close()
